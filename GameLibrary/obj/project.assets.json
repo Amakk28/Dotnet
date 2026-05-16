@@ -3166,11 +3166,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\abrar\\source\\repos\\Dotnet\\MyApi\\MyApi.csproj",
-      "projectName": "MyApi",
-      "projectPath": "C:\\Users\\abrar\\source\\repos\\Dotnet\\MyApi\\MyApi.csproj",
+      "projectUniqueName": "C:\\Users\\abrar\\source\\repos\\Dotnet\\GameLibrary\\GameLibrary.csproj",
+      "projectName": "GameLibrary",
+      "projectPath": "C:\\Users\\abrar\\source\\repos\\Dotnet\\GameLibrary\\GameLibrary.csproj",
       "packagesPath": "C:\\Users\\abrar\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\abrar\\source\\repos\\Dotnet\\MyApi\\obj\\",
+      "outputPath": "C:\\Users\\abrar\\source\\repos\\Dotnet\\GameLibrary\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\abrar\\AppData\\Roaming\\NuGet\\NuGet.Config"

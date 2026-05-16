@@ -12,6 +12,7 @@ packages/
 
 # Local environment
 *.local
+appsettings*.json
 
 # IDE
 .idea/
