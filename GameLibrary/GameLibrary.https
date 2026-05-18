@@ -1,0 +1,38 @@
+@MyApi_HostAddress = https://localhost:7258
+
+GET {{MyApi_HostAddress}}/api/games
+Accept: application/json
+
+###
+POST {{MyApi_HostAddress}}/api/games
+Content-Type: application/json
+
+{
+    "title": "Minecraft",
+    "genre": "Survival",
+    "developer": "Mojang",
+    "publisher": "Microsoft",
+    "CoverImageUrl": "https://i.sstatic.net/dqVlX.png"
+    "releaseDate": "2024-01-01T00:00:00"
+}
+
+###
+DELETE {{MyApi_HostAddress}}/api/games
+Accept: application/json
+
+###
+DELETE {{MyApi_HostAddress}}/api/games/21
+Accept: application/json
+
+###
+PUT {{MyApi_HostAddress}}/api/games/22
+Content-Type: application/json
+
+{
+    "id": 22,
+    "title": "Old Game",
+    "genre": "Adventure",
+    "developer": "Gaylord",
+    "publisher": "Gay Productions",
+    "releaseDate": "2026-02-01T00:00:00"
+}
