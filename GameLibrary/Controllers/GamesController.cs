@@ -1,9 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 using GameLibrary.Data;
 using GameLibrary.Models;
 
@@ -43,6 +40,7 @@ namespace GameLibrary.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<ActionResult<Game>> CreateGame(Game game)
         {
             // Check if a game has the same details to prevent duplicates
@@ -63,6 +61,7 @@ namespace GameLibrary.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize]
         public async Task<IActionResult> UpdateGame(int id, Game game)
         {
             if (id != game.Id)
@@ -81,6 +80,7 @@ namespace GameLibrary.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize]
         public async Task<IActionResult> DeleteGame(int id)
         {
             var game = await context.Games.FindAsync(id);
@@ -94,6 +94,7 @@ namespace GameLibrary.Controllers
         }
 
         [HttpDelete]
+        [Authorize]
         public async Task<IActionResult> DeleteAllGames()
         {
             var games = await context.Games.ToListAsync();

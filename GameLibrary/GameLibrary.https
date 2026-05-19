@@ -1,5 +1,5 @@
 @MyApi_HostAddress = https://localhost:7258
-
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyIiwiZW1haWwiOiJ0ZXN0QGVtYWlsLmNvbSIsInVuaXF1ZV9uYW1lIjoidGVzdCIsImp0aSI6ImI3MzcxMWU1LWQxOGEtNDIxYi1iYmFiLTFkMjcxY2RhNTZlOCIsImV4cCI6MTc3OTE2MzAzMiwiaXNzIjoiR2FtZUxpYnJhcnlBcGkiLCJhdWQiOiJHYW1lTGlicmFyeUNsaWVudCJ9.r6g3sm33gakA6P1cTx0sxmxbBRXC4OrHxriXVWWjKOY
 GET {{MyApi_HostAddress}}/api/games
 Accept: application/json
 
@@ -12,7 +12,7 @@ Content-Type: application/json
     "genre": "Survival",
     "developer": "Mojang",
     "publisher": "Microsoft",
-    "CoverImageUrl": "https://i.sstatic.net/dqVlX.png"
+    "CoverImageUrl": "https://i.sstatic.net/dqVlX.png",
     "releaseDate": "2024-01-01T00:00:00"
 }
 
@@ -36,3 +36,32 @@ Content-Type: application/json
     "publisher": "Gay Productions",
     "releaseDate": "2026-02-01T00:00:00"
 }
+
+###
+POST https://localhost:7258/api/auth/register
+Content-Type: application/json
+
+{
+    "username": "test",
+    "email": "test@email.com",
+    "password": "password123"
+}
+
+###
+POST https://localhost:7258/api/auth/login
+Content-Type: application/json
+
+{
+    "email": "test@email.com",
+    "password": "password123"
+}
+
+###
+GET https://localhost:7258/api/auth/profile
+Authorization: Bearer {{token}}
+Accept: application/json
+
+###
+GET https://localhost:7258/api/auth/test
+Authorization: Bearer {{token}}
+Accept: application/json
