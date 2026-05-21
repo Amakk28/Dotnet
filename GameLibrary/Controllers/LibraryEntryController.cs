@@ -3,6 +3,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
 using GameLibrary.Data;
 using GameLibrary.Models;
+using GameLibrary.Models.DTOs;
+using System.Security.Claims;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace GameLibrary.Controllers
 {
@@ -57,8 +60,20 @@ namespace GameLibrary.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<LibraryEntry>> CreateLibraryEntry(LibraryEntry entry)
+        [Authorize]
+        public async Task<ActionResult<LibraryEntry>> CreateLibraryEntry(LibraryEntryDto entryDto)
         {
+            // Create a new library entry
+            var entry = new LibraryEntry
+            {
+                UserId = int.Parse(User.FindFirstValue(JwtRegisteredClaimNames.Sub)!),
+                GameId = entryDto.GameId,
+                Status = entryDto.Status,
+                User = null!,
+                Game = null!,
+                AddedDate = DateTime.UtcNow
+            };
+        
             // Check if the user and game exist
             var userExists = await context.Users.AnyAsync(u => u.Id == entry.UserId);
             var gameExists = await context.Games.AnyAsync(g => g.Id == entry.GameId);
@@ -76,25 +91,36 @@ namespace GameLibrary.Controllers
                 return BadRequest("Duplicate Entry.");
             }
 
+            // Add the new entry to the database
             context.LibraryEntries.Add(entry);
             await context.SaveChangesAsync();
-            return CreatedAtAction(nameof(GetLibraryEntry), new { id = entry.Id }, entry);
+
+            // Return the created entry
+            LibraryEntryResponseDto responseDto = new LibraryEntryResponseDto
+            {
+                Id = entry.Id,
+                UserId = entry.UserId,
+                GameId = entry.GameId,
+                AddedDate = entry.AddedDate,
+                GameTitle = entry.Game.Title
+            };
+
+            return CreatedAtAction(nameof(GetLibraryEntry), new { id = entry.Id }, responseDto);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateLibraryEntry(int id, LibraryEntry entry)
+        public async Task<IActionResult> UpdateLibraryEntry(int id, LibraryEntryDto entryDto)
         {
-            if (id != entry.Id)
+            // Load the library entry to update
+            var entry = await context.LibraryEntries.FindAsync(id);
+            if (entry == null)
             {
-                return BadRequest("ID mismatch.");
-            }
-
-            var exists = await context.LibraryEntries.AnyAsync(le => le.Id == id);
-            if (!exists) {
                 return NotFound("Library Entry not found.");
             }
 
-            context.Entry(entry).State = EntityState.Modified;
+            entry.GameId = entryDto.GameId;
+            entry.Status = entryDto.Status;
+
             await context.SaveChangesAsync();
             return NoContent();
         }

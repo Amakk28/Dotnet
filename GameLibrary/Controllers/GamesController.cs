@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
 using GameLibrary.Data;
 using GameLibrary.Models;
+using GameLibrary.Models.DTOs;
 
 namespace GameLibrary.Controllers
 {
@@ -41,23 +42,47 @@ namespace GameLibrary.Controllers
 
         [HttpPost]
         [Authorize]
-        public async Task<ActionResult<Game>> CreateGame(Game game)
+        public async Task<ActionResult<Game>> CreateGame(CreateGameDto gameDto)
         {
+            var game = new Game
+            {
+                Title = gameDto.Title,
+                Genre = gameDto.Genre,
+                Developer = gameDto.Developer,
+                Publisher = gameDto.Publisher,
+                CoverImageUrl = gameDto.CoverImageUrl,
+                ReleaseDate = gameDto.ReleaseDate
+            };
+
             // Check if a game has the same details to prevent duplicates
             var exists = await context.Games.AnyAsync(g => 
-                g.Title == game.Title &&
-                g.Genre == game.Genre &&
-                g.Developer == game.Developer &&
-                g.Publisher == game.Publisher &&
-                g.ReleaseDate == game.ReleaseDate
+                g.Title == gameDto.Title &&
+                g.Genre == gameDto.Genre &&
+                g.Developer == gameDto.Developer &&
+                g.Publisher == gameDto.Publisher &&
+                g.ReleaseDate == gameDto.ReleaseDate
             );
             if (exists)
             {
                 return BadRequest("Duplicate Entry.");
             }
+
+            // Add the new game to the database
             context.Games.Add(game);
             await context.SaveChangesAsync();
-            return CreatedAtAction(nameof(GetGame), new { id = game.Id }, game);
+
+            var responseDto = new GameResponseDto
+            {
+                Id = game.Id,
+                Title = game.Title,
+                Genre = game.Genre,
+                Developer = game.Developer,
+                Publisher = game.Publisher,
+                CoverImageUrl = game.CoverImageUrl,
+                ReleaseDate = game.ReleaseDate
+            };
+
+            return CreatedAtAction(nameof(GetGame), new { id = game.Id }, responseDto);
         }
 
         [HttpPut("{id}")]
